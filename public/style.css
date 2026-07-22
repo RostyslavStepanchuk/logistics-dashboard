@@ -1,0 +1,4 @@
+body { font-family: sans-serif; background: #1a1a1a; color: white; margin: 0; padding: 20px; }
+#board { display: flex; gap: 16px; flex-wrap: wrap; }
+.column { flex: 1; min-width: 220px; }
+.card { padding: 12px; margin-bottom: 10px; border-radius: 8px; }
