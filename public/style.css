@@ -1,4 +1,300 @@
-body { font-family: sans-serif; background: #1a1a1a; color: white; margin: 0; padding: 20px; }
-#board { display: flex; gap: 16px; flex-wrap: wrap; }
-.column { flex: 1; min-width: 220px; }
-.card { padding: 12px; margin-bottom: 10px; border-radius: 8px; }
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-Bold.ttf') format('truetype');
+    font-weight: 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-Medium.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-NameTape.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-OnBoard.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-OnBoardStencil.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'UAFSans';
+    src: url('fonts/UAFSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+:root {
+    --cols: 6;
+    --gap: 5px;;
+    --bg0: #07090f;
+    --bg1: #0b1020;
+    --text: #e9eefc;
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: UAFSans, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+    color: var(--text);
+    background:
+        radial-gradient(1200px 700px at 50% -10%, rgba(120, 150, 255, .25), rgba(0, 0, 0, 0) 60%),
+        radial-gradient(900px 500px at 10% 20%, rgba(0, 255, 170, .07), rgba(0, 0, 0, 0) 55%),
+        radial-gradient(900px 500px at 90% 30%, rgba(255, 80, 80, .08), rgba(0, 0, 0, 0) 55%),
+        linear-gradient(180deg, var(--bg1), var(--bg0));
+    overflow-x: hidden;
+    overflow-y: auto;
+    min-height: 100vh;
+}
+
+.dashboard {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    min-height: 100%;
+}
+
+/* ---------- Заголовки (колонок і нижньої секції) ---------- */
+
+.column-header,
+.section-header {
+    font-weight: 800;
+    font-size: 18px;
+    /* text-transform: uppercase; */
+    justify-content: space-between;
+    text-align: center;
+    align-items: center;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.column-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 12px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.section-header {
+    margin-bottom: 12px;
+}
+
+/* ---------- Верхня частина: сітка з 6 колонок ---------- */
+
+.top-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: var(--gap);
+    align-items: start;
+}
+
+.column {
+    display: flex;
+    flex-direction: column;
+}
+
+.column-tiles {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap);
+}
+
+/* ---------- Нижня частина: тайли в рядок, по 6 у ряд ---------- */
+
+.bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), 1fr);
+    gap: var(--gap);
+}
+
+/* ---------- Тайл / флип-картка ---------- */
+
+.card-flip {
+    perspective: 1000px;
+    height: 108px;
+    cursor: pointer;
+}
+
+.card-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.5s;
+    background: rgb(72, 131, 77);
+    transform-style: preserve-3d;
+    border-radius: 6px;
+}
+
+.card-flip.flipped .card-inner {
+    transform: rotateY(180deg);
+}
+
+.card-front,
+.card-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    overflow: hidden;
+    gap: 2px;
+}
+
+.card-front {
+    gap: 2px;
+}
+
+.card-back {
+    transform: rotateY(180deg);
+    /* background: #1c1c1c; */
+    border: 1px solid #444;
+    justify-content: center;
+    gap: 6px;
+}
+
+.card-back .back-line {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.back-line .back-label {
+    font-weight: 600;
+    margin-right: 4px;
+}
+
+/* Статусні кольори */
+
+.status-ready {
+    background: #48834d;
+    border: 1px solid #245f27;
+}
+
+.status-broken {
+  background: linear-gradient(180deg, rgba(246, 200, 95,.65), rgba(246, 200, 95,.65));
+  border-color: rgba(246, 200, 95,.65);
+  box-shadow: 0 0 0 1px rgba(246, 200, 95,.55), 0 0 45px rgba(246, 200, 95,.55), 0 22px 60px rgba(0,0,0,.55);
+  transition: 1s;
+}
+
+.status-broken-halfway,
+.status-evac {
+    background: linear-gradient(180deg, rgba(255, 80, 80, .55), rgba(255, 80, 80, .55));
+    border-color: rgba(255, 80, 80, .65);
+    box-shadow: 0 0 0 1px rgba(255, 80, 80, .55), 0 0 45px rgba(255, 60, 60, .55), 0 22px 60px rgba(0, 0, 0, .55);
+    transition: 1s;
+}
+
+.status-onroute {
+  background: linear-gradient(rgba(99, 99, 102, 0.55), rgba(77, 77, 81, 0.55));
+  border-color: rgba(125, 136, 255,.65);
+  box-shadow: 0 0 0 1px rgba(125, 136, 255,.55), 0 0 45px rgba(125, 136, 255,.55), 0 22px 60px rgba(0,0,0,.55);
+  transition: 1s;
+}
+
+/* Рядки тексту на лицьовій стороні тайла */
+
+.line-title,
+.line-status {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+}
+
+.line-time {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.9;
+    line-height: 1.2;
+}
+
+.line-comment {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.85;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: auto;
+}
+
+/* Скролбар під темну тему */
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #111;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 5px;
+}
+
+.vehicle-img {
+    position: absolute;
+    right: -15px;
+    bottom: -20px;
+    height: 100%;
+    width: auto;
+    opacity: 0.7;
+    /* напівпрозоро, щоб не забивала текст */
+    pointer-events: none;
+    /* картинка не заважає кліку по картці */
+    z-index: 0;
+}

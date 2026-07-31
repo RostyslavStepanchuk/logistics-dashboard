@@ -2,12 +2,30 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <title>Дашборд автопарку</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Дашборд логістики</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Статус автопарку</h1>
-  <div id="board"></div>
+ 
+  <div class="dashboard">
+ 
+    <!-- Верхня частина: тайли по напрямках (unit_delivery: true) -->
+    <section class="top-grid" id="topGrid">
+      <!-- колонки генеруються JS-ом -->
+    </section>
+ 
+    <!-- Нижня частина: поїздки не по маршрутах (unit_delivery: false) -->
+    <section class="bottom-section">
+      <div class="section-header">ВИЇЗДИ ПОЗА БОЙОВИМ ЧЕРГУВАННЯМ</div>
+      <div class="bottom-grid" id="bottomGrid">
+        <!-- тайли генеруються JS-ом -->
+      </div>
+    </section>
+ 
+  </div>
+ 
   <script src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
