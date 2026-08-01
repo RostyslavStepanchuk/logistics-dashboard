@@ -57,7 +57,8 @@
 
 :root {
     --cols: 6;
-    --gap: 5px;;
+    --gap: 5px;
+    ;
     --bg0: #07090f;
     --bg1: #0b1020;
     --text: #e9eefc;
@@ -219,10 +220,10 @@ body {
 }
 
 .status-broken {
-  background: linear-gradient(180deg, rgba(246, 200, 95,.65), rgba(246, 200, 95,.65));
-  border-color: rgba(246, 200, 95,.65);
-  box-shadow: 0 0 0 1px rgba(246, 200, 95,.55), 0 0 45px rgba(246, 200, 95,.55), 0 22px 60px rgba(0,0,0,.55);
-  transition: 1s;
+    background: linear-gradient(180deg, rgba(246, 200, 95, .65), rgba(246, 200, 95, .65));
+    border-color: rgba(246, 200, 95, .65);
+    box-shadow: 0 0 0 1px rgba(246, 200, 95, .55), 0 0 45px rgba(246, 200, 95, .55), 0 22px 60px rgba(0, 0, 0, .55);
+    transition: 1s;
 }
 
 .status-broken-halfway,
@@ -234,10 +235,10 @@ body {
 }
 
 .status-onroute {
-  background: linear-gradient(rgba(99, 99, 102, 0.55), rgba(77, 77, 81, 0.55));
-  border-color: rgba(125, 136, 255,.65);
-  box-shadow: 0 0 0 1px rgba(125, 136, 255,.55), 0 0 45px rgba(125, 136, 255,.55), 0 22px 60px rgba(0,0,0,.55);
-  transition: 1s;
+    background: linear-gradient(rgba(99, 99, 102, 0.55), rgba(77, 77, 81, 0.55));
+    border-color: rgba(125, 136, 255, .65);
+    box-shadow: 0 0 0 1px rgba(125, 136, 255, .55), 0 0 45px rgba(125, 136, 255, .55), 0 22px 60px rgba(0, 0, 0, .55);
+    transition: 1s;
 }
 
 /* Рядки тексту на лицьовій стороні тайла */
@@ -297,4 +298,113 @@ body {
     pointer-events: none;
     /* картинка не заважає кліку по картці */
     z-index: 0;
+}
+
+
+/* ---------- Сторінка логіну ---------- */
+.container-login {
+    max-width: none;
+    height: 100vh;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-card {
+    background: linear-gradient(180deg, #ffffff12, #ffffff08);
+    border: 1px solid hsla(0, 0%, 100%, .1);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    padding: 28px;
+    width: min(460px, 100%);
+}
+
+.auth-blocks {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+}
+
+.auth-blocks img {
+    max-height: 200px;
+    max-width: 200px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.auth-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.auth-input {
+    background: #ffffff0f;
+    border: 1px solid hsla(0, 0%, 100%, .1);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 16px;
+    outline: none;
+    padding: 12px 14px;
+    width: 100%;
+}
+
+
+.auth-button {
+    background: #48834d;
+    border: none;
+    border-radius: 12px;
+    color: #07111e;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 800;
+    margin-top: 4px;
+    padding: 12px 16px;
+}
+
+.unit-name {
+    display: flex;
+    flex-direction: column;
+    align-items: center;   /* по горизонталі */
+    justify-content: center;
+    text-align: center;
+}
+
+.unit-number {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.unit-title {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+.auth-input {
+    background: #ffffff0f;
+    border: 1px solid hsla(0, 0%, 100%, .1);
+    border-radius: 12px;
+    font-size: 16px;
+    outline: none;
+    padding: 12px 14px;
+    width: 100%;
+}
+
+.error-message {
+    color: #ff4d4d;
+    font-size: 14px;
+    margin-top: 8px;
+    text-align: center;
 }
