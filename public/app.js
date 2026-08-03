@@ -4,10 +4,10 @@ const REFRESH_MS = 10000;
 function statusClass(rawStatus) {
   const s = (rawStatus || '').trim().toUpperCase().replace(/\.$/, '');
   if (s === 'В РУСІ') return 'status-onroute';
-  if (s === 'В ОЧІКУВАННІ') return 'status-ready';
-  if (s === 'НЕСПРАВНА') return 'status-broken';
+  if (s === 'В ОЧІКУВАННІ' || s === 'ЗАВЕРШЕНО') return 'status-ready';
+  if (s === 'НЕСПРАВНИЙ') return 'status-broken';
   if (s === 'ЧЕКАЄ ЕВАКУАЦІЇ') return 'status-evac';
-  if (s === 'ЗЛАМАЛАСЬ В ДОРОЗІ') return 'status-broken-halfway';
+  if (s === 'ПОЛОМКА В ДОРОЗІ' || s === 'ЗАГРОЗА') return 'status-broken-halfway';
   return 'status-onroute'; // невідомий статус - за замовчуванням сірий
 }
 
