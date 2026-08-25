@@ -1,14 +1,17 @@
 const REFRESH_MS = 10000;
+const MAX_CARDS_PER_COLUMN = 4;
+const MIN_COLUMNS_BOTTOM = 7;
+const MAX_COLUMNS_BOTTOM = 11;
 
 // Відповідність статусу з JSON -> CSS клас
 function statusClass(rawStatus) {
   const s = (rawStatus || '').trim().toUpperCase().replace(/\.$/, '');
-  if (s === 'В РУСІ') return 'status-onroute';
-  if (s === 'В ОЧІКУВАННІ' || s === 'ЗАВЕРШЕНО') return 'status-ready';
+  if (s === 'В РУСІ' || s === 'ВЕРТАЄТЬСЯ') return 'status-onroute';
+  if (s === 'В ОЧІКУВАННІ' || s === 'В ПУНКТІ ПРИЗНАЧЕННЯ') return 'status-ready';
   if (s === 'НЕСПРАВНИЙ') return 'status-broken';
   if (s === 'ЧЕКАЄ ЕВАКУАЦІЇ') return 'status-evac';
   if (s === 'ПОЛОМКА В ДОРОЗІ' || s === 'ЗАГРОЗА') return 'status-broken-halfway';
-  return 'status-onroute'; // невідомий статус - за замовчуванням сірий
+  return 'status-ready'; // невідомий статус - за замовчуванням сірий
 }
 
 function getImageSrc(vehicle) {
@@ -29,22 +32,28 @@ function formatTime(isoString) {
   if (isNaN(d.getTime())) return '';
   const hh = String(d.getHours()).padStart(2, '0');
   const mm = String(d.getMinutes()).padStart(2, '0');
-  return `З ${hh}:${mm}`;
+  let date = '';
+  const now = new Date();
+  if (d.getDate() !== now.getDate()) {
+    date = ` (${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')})`;
+  }
+
+  return `З ${hh}:${mm}${date}`;
 }
 
 function toggleCardFlip(cardElement) {
-  return function() {
+  return function () {
     if (cardElement.classList.contains('flipped')) {
       cardElement.classList.remove('flipped');
     } else {
       document.querySelectorAll('.card-flip.flipped').forEach(card => card.classList.remove('flipped')); // закриваємо інші перевернуті картки
       cardElement.classList.add('flipped');
       setTimeout(() => cardElement.classList.remove('flipped'), 5000); // автоматично перевертаємо назад через 5 секунд
-
-    }}
+    }
+  }
 }
 
-function buildTopCard(trip) {
+function buildTripCard(trip, isTopGrid = true) {
   const v = trip.vehicle || {};
   const cls = statusClass(trip.status);
 
@@ -60,42 +69,13 @@ function buildTopCard(trip) {
         <div class="line-status">${trip.status || ''}</div>
         <div class="line-time">${formatTime(trip.update_time)}</div>
         <div class="line-comment">${trip.route || '-'}</div>
-        <div class="line-comment">${v.drone_defence || ''}</div>
+        <div class="line-comment">${(isTopGrid ? v.drone_defence : trip.purpose) || '-'}</div>
       </div>
       <div class="card-back">
         <div class="back-line"><span class="back-label">Номер:</span> ${v.plate_number || ''}</div>
         <div class="back-line"><span class="back-label">Водій:</span> ${v.driver || '-'}</div>
         <div class="back-line"><span class="back-label">Старший:</span> ${v.in_charge || '-'}</div>
-        <div class="back-line"><span class="back-label">Мета:</span> ${trip.purpose || '-'}</div>
-      </div>
-    </div>
-  `;
-
-  return wrapper;
-}
-
-function buildBottomCard(trip) {
-  const v = trip.vehicle || {};
-  const cls = statusClass(trip.status);
-
-  const wrapper = document.createElement('div');
-  wrapper.className = 'card-flip';
-  wrapper.addEventListener('click', toggleCardFlip(wrapper));
-
-  wrapper.innerHTML = `
-    <div class="card-inner ${cls}">
-      <div class="card-front">
-        <img class="vehicle-img" src="${getImageSrc(trip.vehicle)}" alt="">
-        <div class="line-title">${trip.vehicle.unit}</div>
-        <div class="line-status">${v.model || ''}</div>
-        <div class="line-time">${formatTime(trip.update_time)}</div>
-        <div class="line-comment">${trip.purpose || '-'}</div>
-      </div>
-      <div class="card-back">
-        <div class="back-line"><span class="back-label">Номер:</span> ${v.plate_number || ''}</div>
-        <div class="back-line"><span class="back-label">Водій:</span> ${v.driver || '-'}</div>
-        <div class="back-line"><span class="back-label">Старший:</span> ${v.in_charge || '-'}</div>
-        <div class="back-line"><span class="back-label">Захист:</span> ${v.drone_defence || ''}</div>
+        <div class="back-line"><span class="back-label">Мета:</span> ${(isTopGrid ? trip.purpose : v.drone_defence) || '-'}</div>
       </div>
     </div>
   `;
@@ -113,13 +93,16 @@ function renderTopGrid(trips) {
     "3 адн": [],
     "4 адн": [],
     "днар": [],
-    "реабатр": []
+    "реабатр": [],
+    "інші пірозділи": []
   };
-  
+
   trips.forEach(trip => {
     const unit = (trip.vehicle && trip.vehicle.unit);
     if (byUnit[unit]) {
       byUnit[unit].push(trip);
+    } else {
+      byUnit["інші пірозділи"].push(trip);
     }
   });
 
@@ -131,12 +114,7 @@ function renderTopGrid(trips) {
     header.className = 'column-header';
     header.textContent = unit;
     column.appendChild(header);
-
-    const tilesWrap = document.createElement('div');
-    tilesWrap.className = 'column-tiles';
-    byUnit[unit].forEach(trip => tilesWrap.appendChild(buildTopCard(trip)));
-    column.appendChild(tilesWrap);
-
+    column.appendChild(buildStackOfTiles(byUnit[unit], true));
     topGrid.appendChild(column);
   });
 }
@@ -144,7 +122,59 @@ function renderTopGrid(trips) {
 function renderBottomGrid(trips) {
   const bottomGrid = document.getElementById('bottomGrid');
   bottomGrid.innerHTML = '';
-  trips.forEach(trip => bottomGrid.appendChild(buildBottomCard(trip)));
+
+  const byUnit = {};
+  trips.forEach(trip => {
+    const unit = (trip.vehicle && trip.vehicle.unit);
+    if (byUnit[unit]) {
+      byUnit[unit].push(trip);
+    } else {
+      byUnit[unit] = [trip];
+    }
+  });
+
+  let totalColumns = 0;
+
+  Object.keys(byUnit)
+    .sort()
+    .forEach(unit => {
+      const column = document.createElement('div');
+      column.className = 'column';
+
+      const header = document.createElement('div');
+      header.className = 'column-header';
+      header.textContent = unit;
+      column.appendChild(header);
+
+      let subColumns = Math.min(Math.ceil(byUnit[unit].length / MAX_CARDS_PER_COLUMN), 3); // обмежуємо до 3 підколонок
+      totalColumns += subColumns;
+      if (subColumns === 1) {
+        column.appendChild(buildStackOfTiles(byUnit[unit], false));
+      } else {
+        const container = document.createElement('div');
+        container.classList.add('column-split')
+        column.classList.add(subColumns === 2 ? 'column-double' : 'column-triple');
+
+        while (subColumns > 0) {
+          const tilesPerSubColumn = Math.ceil(byUnit[unit].length / subColumns);
+          const subColumn = byUnit[unit].splice(0, tilesPerSubColumn);
+          container.appendChild(buildStackOfTiles(subColumn, false));
+          subColumns--;
+        }
+        column.appendChild(container);
+      }
+      bottomGrid.appendChild(column);
+    });
+  
+  const columnsToSet = Math.max(MIN_COLUMNS_BOTTOM, Math.min(totalColumns, MAX_COLUMNS_BOTTOM));
+  document.documentElement.style.setProperty('--bottom-cols', columnsToSet);
+}
+
+function buildStackOfTiles(trips, isTopGrid = true) {
+  const tilesWrap = document.createElement('div');
+  tilesWrap.className = 'column-tiles';
+  trips.forEach(trip => tilesWrap.appendChild(buildTripCard(trip, isTopGrid)));
+  return tilesWrap;
 }
 
 async function loadDashboard() {
