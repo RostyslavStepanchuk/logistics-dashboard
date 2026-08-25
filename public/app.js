@@ -75,7 +75,7 @@ function buildTripCard(trip, isTopGrid = true) {
         <div class="back-line"><span class="back-label">Номер:</span> ${v.plate_number || ''}</div>
         <div class="back-line"><span class="back-label">Водій:</span> ${v.driver || '-'}</div>
         <div class="back-line"><span class="back-label">Старший:</span> ${v.in_charge || '-'}</div>
-        <div class="back-line"><span class="back-label">Мета:</span> ${(isTopGrid ? trip.purpose : v.drone_defence) || '-'}</div>
+        <div class="back-line"><span class="back-label">${isTopGrid ? 'Мета' : 'РЕБ'}:</span> ${(isTopGrid ? trip.purpose : v.drone_defence) || '-'}</div>
       </div>
     </div>
   `;
