@@ -56,9 +56,9 @@
 
 
 :root {
-    --cols: 6;
-    --gap: 5px;
-    ;
+    --top-cols: 7;
+    --bottom-cols: 7;
+    --gap: 1px 5px;
     --bg0: #07090f;
     --bg1: #0b1020;
     --text: #e9eefc;
@@ -87,7 +87,7 @@ body {
     padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 22px;
+    gap: 15px;
     min-height: 100%;
 }
 
@@ -97,36 +97,44 @@ body {
 .section-header {
     font-weight: 800;
     font-size: 18px;
-    /* text-transform: uppercase; */
     justify-content: space-between;
     text-align: center;
     align-items: center;
-    padding: 10px 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
+    padding: 4px 12px;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
 }
 
-.column-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 12px;
-    background: linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .02));
-    border-bottom: 1px solid rgba(255, 255, 255, .08);
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+.column-double {
+    grid-column: span 2;
+}
+
+.column-triple {
+    grid-column: span 3;
+}
+
+/* Підколонки з тайлами поруч під одним спільним заголовком */
+.column-split {
+  grid-column: span 1;
+  display: flex;
+  gap: 1px;
+}
+ 
+.column-split .column-tiles {
+  flex: 1;
+  min-width: 0; /* щоб довгий текст у тайлі не розпирав підколонку ширше */
 }
 
 .section-header {
-    margin-bottom: 12px;
+    margin-bottom: 2px;
 }
 
 /* ---------- Верхня частина: сітка з 6 колонок ---------- */
 
 .top-grid {
     display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-columns: repeat(var(--top-cols), 1fr);
     gap: var(--gap);
     align-items: start;
 }
@@ -146,7 +154,7 @@ body {
 
 .bottom-grid {
     display: grid;
-    grid-template-columns: repeat(var(--cols), 1fr);
+    grid-template-columns: repeat(var(--bottom-cols), 1fr);
     gap: var(--gap);
 }
 
@@ -214,7 +222,7 @@ body {
 
 /* Статусні кольори */
 
-.status-ready {
+.status-onroute {
     background: #48834d;
     border: 1px solid #245f27;
 }
@@ -222,7 +230,6 @@ body {
 .status-broken {
     background: linear-gradient(180deg, rgba(246, 200, 95, .65), rgba(246, 200, 95, .65));
     border-color: rgba(246, 200, 95, .65);
-    box-shadow: 0 0 0 1px rgba(246, 200, 95, .55), 0 0 45px rgba(246, 200, 95, .55), 0 22px 60px rgba(0, 0, 0, .55);
     transition: 1s;
 }
 
@@ -230,14 +237,12 @@ body {
 .status-evac {
     background: linear-gradient(180deg, rgba(255, 80, 80, .55), rgba(255, 80, 80, .55));
     border-color: rgba(255, 80, 80, .65);
-    box-shadow: 0 0 0 1px rgba(255, 80, 80, .55), 0 0 45px rgba(255, 60, 60, .55), 0 22px 60px rgba(0, 0, 0, .55);
     transition: 1s;
 }
 
-.status-onroute {
+.status-ready {
     background: linear-gradient(rgba(99, 99, 102, 0.55), rgba(77, 77, 81, 0.55));
     border-color: rgba(125, 136, 255, .65);
-    box-shadow: 0 0 0 1px rgba(125, 136, 255, .55), 0 0 45px rgba(125, 136, 255, .55), 0 22px 60px rgba(0, 0, 0, .55);
     transition: 1s;
 }
 
@@ -293,13 +298,10 @@ body {
     bottom: -20px;
     height: 100%;
     width: auto;
-    opacity: 0.7;
-    /* напівпрозоро, щоб не забивала текст */
-    pointer-events: none;
-    /* картинка не заважає кліку по картці */
+    opacity: 0.7; /* напівпрозоро, щоб не забивала текст */
+    pointer-events: none; /* картинка не заважає кліку по картці */
     z-index: 0;
 }
-
 
 /* ---------- Сторінка логіну ---------- */
 .container-login {
@@ -375,7 +377,8 @@ body {
 .unit-name {
     display: flex;
     flex-direction: column;
-    align-items: center;   /* по горизонталі */
+    align-items: center;
+    /* по горизонталі */
     justify-content: center;
     text-align: center;
 }
