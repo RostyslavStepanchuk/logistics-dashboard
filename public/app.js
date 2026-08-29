@@ -22,6 +22,9 @@ function getImageSrc(vehicle) {
     'bus': 'images/vehicles/bus.png',
     'bbm': 'images/vehicles/bbm.png',
     'oshkosh': 'images/vehicles/oshkosh.png',
+    'daf': 'images/vehicles/daf.png',
+    'uaz': 'images/vehicles/uaz.png',
+    'tdc': 'images/vehicles/tdc.png',
   };
   return map[vehicle && vehicle.type] || 'images/vehicles/pickup.png'; // картинка-заглушка про запас
 }
@@ -64,7 +67,7 @@ function buildTripCard(trip, isTopGrid = true) {
   wrapper.innerHTML = `
     <div class="card-inner ${cls}">
       <div class="card-front">
-        <img class="vehicle-img" src="${getImageSrc(trip.vehicle)}" alt="">
+        <img class="vehicle-img ${trip.vehicle.type}" src="${getImageSrc(trip.vehicle)}" alt="">
         <div class="line-title">${v.model || ''}</div>
         <div class="line-status">${trip.status || ''}</div>
         <div class="line-time">${formatTime(trip.update_time)}</div>

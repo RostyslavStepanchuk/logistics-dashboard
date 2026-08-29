@@ -292,6 +292,8 @@ body {
     border-radius: 5px;
 }
 
+/* ---------- Картинки транспортних засобів ---------- */
+
 .vehicle-img {
     position: absolute;
     right: -15px;
@@ -301,6 +303,57 @@ body {
     opacity: 0.7; /* напівпрозоро, щоб не забивала текст */
     pointer-events: none; /* картинка не заважає кліку по картці */
     z-index: 0;
+}
+
+.pickup {
+    bottom: -30px;
+}
+
+.kamaz {
+    max-width:140px;
+    bottom: -15px;
+    height:auto;
+    right: -10px;
+}
+
+.kraz {
+    max-width:170px;
+    bottom: -27px;
+    height:auto;
+    right: -15px;
+}
+
+.bus {
+    right: -20px;
+    bottom: -25px;
+}
+
+.oshkosh {
+    max-width: 190px;
+    height: auto;
+    right: -22px;
+    bottom: -35px;
+}
+
+.daf {
+    max-width: 140px;
+    height: auto;
+    right: -25px;
+    bottom: 0px;
+}
+
+.uaz {
+    max-width: 95px;
+    height: auto;
+    right: 2px;
+    bottom: 2px;
+}
+
+.tdc {
+    max-width: 110px;
+    height: auto;
+    right: 3px;
+    bottom: 0px;
 }
 
 /* ---------- Сторінка логіну ---------- */
