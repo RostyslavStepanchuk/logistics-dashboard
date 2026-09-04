@@ -356,6 +356,20 @@ body {
     bottom: 0px;
 }
 
+.minivan {
+    max-width: 90px;
+    height: auto;
+    right: 3px;
+    bottom: 0px;
+}
+
+.quadro {
+    max-width: 90px;
+    height: auto;
+    right: 0px;
+    bottom: 0px;
+}
+
 /* ---------- Сторінка логіну ---------- */
 .container-login {
     max-width: none;

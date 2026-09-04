@@ -25,6 +25,8 @@ function getImageSrc(vehicle) {
     'daf': 'images/vehicles/daf.png',
     'uaz': 'images/vehicles/uaz.png',
     'tdc': 'images/vehicles/tdc.png',
+    'quadro': 'images/vehicles/quadro.png',
+    'minivan': 'images/vehicles/minivan.png'
   };
   return map[vehicle && vehicle.type] || 'images/vehicles/pickup.png'; // картинка-заглушка про запас
 }
